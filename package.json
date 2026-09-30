@@ -1,0 +1,14 @@
+{
+  "name": "vite-dev-inside-git-dir",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "node setup.mjs",
+    "dev:outside": "vite app",
+    "dev:inside": "vite .git/inside/app",
+    "dev:inside:opt-in": "OPT_IN=1 vite .git/inside/app"
+  },
+  "devDependencies": {
+    "vite": "^8.3.1"
+  }
+}
