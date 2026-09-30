@@ -15,10 +15,16 @@ npm run setup            # copies ./app to .git/inside/app
 | `npm run dev:outside` (control, `./app`) | 200 | HMR | ignored |
 | `npm run dev:inside` | **403** | **nothing** | ignored |
 | `npm run dev:inside:opt-in` | 200 | HMR | **picked up** |
+| `npm run dev:inside:narrow` | 200 | HMR | ignored |
 
 Dropping `**/.git/**` from `server.fs.deny` alone fixes serving (200) but not HMR: the watcher still
-ignores the project. `dev:inside:opt-in` is the best available workaround: `server.fs.deny` without `**/.git/**` plus
-`server.watch.ignored: ['!**/.git/**']`. It works, but the negation also beats the default
-`**/node_modules/**` ignore, so a real project would have its whole `node_modules` watched.
+ignores the project. Both opt-in variants also un-ignore the project in the watcher, where a matching
+negation beats every ignore pattern, the default `**/node_modules/**` included:
 
-Watch the events with `--debug hmr`, e.g. `npm run dev:inside:opt-in -- --debug hmr`.
+- `dev:inside:opt-in` uses `!**/.git/**`. It matches everything under the project, so `node_modules`
+  gets watched too.
+- `dev:inside:narrow` uses a negation for the root itself and every path under it with no
+  `node_modules` segment at any depth (see `app/vite.config.js`). It works, but only if you know that
+  negations win and write an extglob that re-states the default ignores.
+
+Watch the events with `--debug hmr`, e.g. `npm run dev:inside:narrow -- --debug hmr`.

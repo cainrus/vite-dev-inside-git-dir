@@ -6,7 +6,8 @@
     "setup": "node setup.mjs",
     "dev:outside": "vite app",
     "dev:inside": "vite .git/inside/app",
-    "dev:inside:opt-in": "OPT_IN=1 vite .git/inside/app"
+    "dev:inside:opt-in": "OPT_IN=1 vite .git/inside/app",
+    "dev:inside:narrow": "OPT_IN=narrow vite .git/inside/app"
   },
   "devDependencies": {
     "vite": "^8.3.1"
